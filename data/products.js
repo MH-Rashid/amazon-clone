@@ -656,5 +656,37 @@ const products = [
       "apparel",
       "mens"
     ]
+  },
+  {
+    id: "pA",
+    image: "images/products/backpack.jpg",
+    name: "Backpack Black Unisex",
+    rating: {
+      stars: 4.5,
+      count: 3127
+    },
+    priceCents: 3000,
+    keywords: [
+      "sweaters",
+      "hoodies",
+      "apparel",
+      "mens"
+    ]
+  },
+  {
+    id: "pB",
+    image: "images/products/umbrella.jpg",
+    name: "Umbrella Green Retractable",
+    rating: {
+      stars: 5,
+      count: 5003
+    },
+    priceCents: 1500,
+    keywords: [
+      "sweaters",
+      "hoodies",
+      "apparel",
+      "mens"
+    ]
   }
 ];
