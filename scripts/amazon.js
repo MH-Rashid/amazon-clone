@@ -1,3 +1,5 @@
+import { cart } from "../data/cart.js";
+
 let productsHTML = "";
 
 products.forEach((product) => {
@@ -98,13 +100,13 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
       `.js-added-to-cart-${productId}`
     );
     addedMessage.classList.add("show-added-to-cart");
-    
+
     const previousTimeoutId = addedMessageTimeouts[productId];
-    
+
     if (previousTimeoutId) {
       clearTimeout(previousTimeoutId);
     }
-  
+
     const timeoutId = setTimeout(() => {
       addedMessage.classList.remove("show-added-to-cart");
     }, 2000);
