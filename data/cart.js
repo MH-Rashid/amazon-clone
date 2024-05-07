@@ -89,9 +89,6 @@ export function updateQuantity(productId, newQuantity) {
     matchingItem.quantity = newQuantity;
   }
 
-  document.querySelector(`.js-quantity-label-${productId}`).innerHTML =
-    newQuantity;
-
   saveToStorage();
 }
 
