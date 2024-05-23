@@ -2,22 +2,11 @@ import { orders } from "../data/orders.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import formatCurrency from "./utils/money.js";
 import { getProduct, loadProductsFetch } from "../data/products.js";
-import { addToCart, calculateCartQuantity } from "../data/cart.js";
-
-function renderCartQuantity() {
-  const cartQuantity = calculateCartQuantity();
-  
-  const cartHtml = `
-    <img class="cart-icon" src="images/icons/cart-icon.png" />
-    <div class="cart-quantity">${cartQuantity}</div>
-    <div class="cart-text">Cart</div>
-  `
-
-  document.querySelector(".js-orders-cart-link").innerHTML = cartHtml;
-}
+import { addToCart } from "../data/cart.js";
+import { renderHeader, renderCartQuantity } from "./header.js";
 
 async function loadPage() {
-  renderCartQuantity();
+  renderHeader();
   await loadProductsFetch();
 
   let ordersHtml = "";
@@ -65,7 +54,8 @@ async function loadPage() {
         const matchingProduct = getProduct(productId);
 
         const { estimatedDeliveryTime } = product;
-        const arrivalDate = dayjs(estimatedDeliveryTime).format("MMMM D");
+        const currentTime = dayjs();
+        const arrivalDate = dayjs(estimatedDeliveryTime);
 
         html += `
           <div class="product-image-container">
@@ -76,7 +66,7 @@ async function loadPage() {
             <div class="product-name">
               ${matchingProduct.name}
             </div>
-            <div class="product-delivery-date">Arriving on: ${arrivalDate}</div>
+            <div class="product-delivery-date">${currentTime < arrivalDate ? 'Arriving' : 'Delivered'} on: ${arrivalDate.format("MMMM D")}</div>
             <div class="product-quantity">Quantity: ${product.quantity}</div>
             <button class="buy-again-button button-primary js-buy-again-button" data-product-id="${matchingProduct.id}">
               <img class="buy-again-icon" src="images/icons/buy-again.png" />

@@ -3,8 +3,6 @@ import { renderPaymentSummary } from "./checkout/paymentSummary.js";
 import renderCheckoutHeader from "./checkout/checkoutHeader.js";
 import { loadProductsFetch } from "../data/products.js";
 import { loadCartFetch } from "../data/cart.js";
-// import '../data/car.js';
-// import '../data/backend-practise.js';
 
 async function loadPage() {
   try {

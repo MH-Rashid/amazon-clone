@@ -8,7 +8,7 @@ export function loadFromStorage() {
   cart = JSON.parse(localStorage.getItem("cart")) || [];
 }
 
-function saveToStorage() {
+export function saveToStorage() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
@@ -25,7 +25,11 @@ export function addToCart(productId) {
     `.js-quantity-selector-${productId}`
   );
 
-  const quantity = Number(quantitySelector.value);
+  let quantity;
+  
+  if (quantitySelector) {
+    quantity = Number(quantitySelector.value)
+  } else quantity = 1;
 
   if (matchingItem) {
     matchingItem.quantity += quantity;

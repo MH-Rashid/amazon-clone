@@ -1,22 +1,10 @@
 import { orders } from "../data/orders.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { loadProductsFetch, getProduct } from "../data/products.js";
-import { calculateCartQuantity } from "../data/cart.js";
-
-function renderCartQuantity() {
-  const cartQuantity = calculateCartQuantity();
-
-  const cartHtml = `
-    <img class="cart-icon" src="images/icons/cart-icon.png" />
-    <div class="cart-quantity">${cartQuantity}</div>
-    <div class="cart-text">Cart</div>
-  `;
-
-  document.querySelector(".js-tracking-cart").innerHTML = cartHtml;
-}
+import { renderHeader } from "./header.js";
 
 async function loadPage() {
-  renderCartQuantity();
+  renderHeader(); 
   await loadProductsFetch();
 
   const url = new URL(window.location.href);
@@ -73,7 +61,7 @@ async function loadPage() {
     </div>
 
     <div class="progress-bar-container">
-      <div class="progress-bar" style="width: ${deliveryProgress}%;"></div>
+      <progress value=${deliveryProgress} max=100></progress>
     </div>
   `;
 

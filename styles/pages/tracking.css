@@ -73,9 +73,18 @@
   overflow: hidden;
 }
 
-.progress-bar {
-  height: 100%;
+progress {
   background-color: green;
   border-radius: 50px;
-  width: 50%;
+  height: 100%;
+  width: 100%;
+}
+
+progress::-webkit-progress-bar {
+  background-color: white; /* Background color of the progress bar container */
+}
+
+progress::-webkit-progress-value {
+  background-color: green; /* Color of the filled portion */
+  transition: all 1s ease; /* Transition the width property */
 }

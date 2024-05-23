@@ -1,3 +1,17 @@
+import { calculateCartQuantity } from "../data/cart.js";
+
+export function renderCartQuantity() {
+  const cartQuantity = calculateCartQuantity();
+  
+  const cartHtml = `
+    <img class="cart-icon" src="images/icons/cart-icon.png" />
+    <div class="cart-quantity">${cartQuantity}</div>
+    <div class="cart-text">Cart</div>
+  `
+
+  document.querySelector(".js-cart-link").innerHTML = cartHtml;
+}
+
 export function renderHeader() {
   document.querySelector('.js-amazon-header').innerHTML = `
     <div class="amazon-header-left-section">
@@ -24,17 +38,22 @@ export function renderHeader() {
         <span class="orders-text">& Orders</span>
       </a>
 
-      <a class="cart-link header-link" href="checkout.html">
-        <img class="cart-icon" src="images/icons/cart-icon.png" />
-        <div class="cart-quantity js-cart-quantity"></div>
-        <div class="cart-text">Cart</div>
+      <a class="cart-link header-link js-cart-link" href="checkout.html">
       </a>
     </div>
   `;
 
+  renderCartQuantity();
+  
+  document.querySelector('.js-search-bar').addEventListener('keypress', (event) => {
+    const searchTerm = document.querySelector('.js-search-bar').value;
+    if (event.key === "Enter") {
+      window.location.href = `amazon.html?search=${searchTerm}`;
+    }
+  });
+
   document.querySelector('.js-search-button').addEventListener('click', () => {
     const searchTerm = document.querySelector('.js-search-bar').value;
-    // console.log(searchTerm);
     window.location.href = `amazon.html?search=${searchTerm}`;
   })
 }

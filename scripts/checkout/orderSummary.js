@@ -58,7 +58,8 @@ export function renderOrderSummary() {
               
               <input class="quantity-input js-quantity-input-${
                 matchingProduct.id
-              }" />
+              }" type='number' step='1' value=${cartItem.quantity} />
+              
               <span class="save-quantity-link js-save-quantity-link link-primary" data-product-id=${
                 matchingProduct.id
               }>Save</span>
@@ -125,6 +126,16 @@ export function renderOrderSummary() {
       );
 
       container.classList.add("is-editing-quantity");
+      const newQuantityInput = document.querySelector(`.js-quantity-input-${productId}`);
+      newQuantityInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          const newQuantity = Number(newQuantityInput.value);
+          updateQuantity(productId, newQuantity);
+          renderCheckoutHeader();
+          renderOrderSummary();
+          renderPaymentSummary();
+        }
+      })
     });
   });
 
@@ -141,12 +152,6 @@ export function renderOrderSummary() {
       renderCheckoutHeader();
       renderOrderSummary();
       renderPaymentSummary();
-
-      // const container = document.querySelector(
-      //   `.js-cart-item-container-${productId}`
-      // );
-
-      // container.classList.remove("is-editing-quantity");
     });
   });
 
