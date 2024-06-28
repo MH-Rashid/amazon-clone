@@ -15,7 +15,7 @@ export function renderCartQuantity() {
 export function renderHeader() {
   document.querySelector('.js-amazon-header').innerHTML = `
     <div class="amazon-header-left-section">
-      <a href="amazon.html" class="header-link">
+      <a href="index.html" class="header-link">
         <img class="amazon-logo" src="images/amazon-logo-white.png" />
         <img
           class="amazon-mobile-logo"
@@ -48,12 +48,12 @@ export function renderHeader() {
   document.querySelector('.js-search-bar').addEventListener('keypress', (event) => {
     const searchTerm = document.querySelector('.js-search-bar').value;
     if (event.key === "Enter") {
-      window.location.href = `amazon.html?search=${searchTerm}`;
+      window.location.href = `index.html?search=${searchTerm}`;
     }
   });
 
   document.querySelector('.js-search-button').addEventListener('click', () => {
     const searchTerm = document.querySelector('.js-search-bar').value;
-    window.location.href = `amazon.html?search=${searchTerm}`;
+    window.location.href = `index.html?search=${searchTerm}`;
   })
 }
