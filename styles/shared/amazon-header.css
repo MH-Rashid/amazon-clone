@@ -1,3 +1,18 @@
+.disclaimer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: black;
+  height: 20px;
+  z-index: 100;
+  
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  align-content: center;
+}
+
 .amazon-header {
   background-color: rgb(19, 25, 33);
   color: white;
@@ -9,7 +24,7 @@
   justify-content: space-between;
 
   position: fixed;
-  top: 0;
+  top: 20px;
   left: 0;
   right: 0;
   height: 60px;
