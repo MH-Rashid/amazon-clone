@@ -101,7 +101,8 @@ function renderProductsGrid() {
       const { productId } = button.dataset;
 
       addToCart(productId);
-      updateCartQuantity();
+      // updateCartQuantity();
+      renderCartQuantity();
 
       const addedMessage = document.querySelector(
         `.js-added-to-cart-${productId}`
