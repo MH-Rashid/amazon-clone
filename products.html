@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Login / Register</title>
+    <title>Amazon clone</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -14,21 +14,20 @@
     />
 
     <!-- CSS files -->
-     
     <link rel="stylesheet" href="styles/shared/general.css" />
     <link rel="stylesheet" href="styles/shared/amazon-header.css" />
-    <link rel="stylesheet" href="styles/pages/auth.css" />
+    <link rel="stylesheet" href="styles/pages/amazon.css" />
   </head>
   <body>
     <div class="disclaimer">
-      This project is not associated with the original Amazon.com and was only
-      created for educational purposes.
+      This project is not associated with the original Amazon.com and was only created for educational purposes.
+    </div>
+    <div class="amazon-header js-amazon-header"></div>
+
+    <div class="main js-main">
+      <div class="products-grid js-products-grid"></div>
     </div>
 
-    <div class="auth js-auth"></div>
-
-    <div id="toast-container"></div>
-
-    <script type="module" src="scripts/auth.js"></script>
+    <script type="module" src="scripts/amazon.js"></script>
   </body>
 </html>

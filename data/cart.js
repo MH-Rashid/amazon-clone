@@ -1,4 +1,5 @@
 import { getDeliveryOption } from "./deliveryOptions.js";
+import { getProduct } from "./products.js";
 
 export let cart;
 
@@ -34,9 +35,12 @@ export function addToCart(productId) {
   if (matchingItem) {
     matchingItem.quantity += quantity;
   } else {
+    const product = getProduct(productId);
+
     cart.push({
       productId,
       quantity: quantity,
+      // priceCents: product.priceCents * quantity,
       deliveryOptionId: "1",
     });
   }
