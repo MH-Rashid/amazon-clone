@@ -80,8 +80,7 @@ function AuthForm() {
         `Login successful. Welcome, ${result.user.firstname}`,
         "success"
       );
-
-      // window.location.href = "/products.html";
+      window.location.href = "/products.html";
     } else {
       showToast(
         "Login failed: " + (result.message || "Unknown error"),

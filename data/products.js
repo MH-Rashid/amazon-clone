@@ -1,4 +1,6 @@
+import { fetchAvailableProducts } from "../scripts/http.js";
 import formatCurrency from "../scripts/utils/money.js";
+import { showToast } from "../scripts/utils/toast.js";
 
 export function getProduct(productId) {
   let matchingProduct;
@@ -114,34 +116,31 @@ export function loadProductsFetch() {
 //   console.log('next step');
 // })
 
-export function loadProducts(fun) {
-  const xhr = new XMLHttpRequest();
-
-  xhr.addEventListener("load", () => {
-    products = JSON.parse(xhr.response).map((productDetails) => {
+export async function loadProducts(fun) {
+  try {
+    const response = await fetchAvailableProducts();
+    if (!Array.isArray(response)) {
+      showToast(response.message || "No products found.", "error");
+      return;
+    }
+    products = response.map((productDetails) => {
       if (productDetails.type === "clothing") {
         return new Clothing(productDetails);
       }
-
       if (productDetails.type === "appliance") {
         return new Appliance(productDetails);
       }
-
       return new Product(productDetails);
     });
 
     console.log("load products");
-
     fun();
-  });
-
-  xhr.addEventListener("error", () => {
+  } catch (error) {
     console.log("Unexpected error. Please try again later.");
-  });
-
-  xhr.open("GET", "https://supersimplebackend.dev/products");
-  xhr.send();
+    showToast(`Failed to load products.` + error.message, "error");
+  }
 }
+
 
 /*
 export const products = [

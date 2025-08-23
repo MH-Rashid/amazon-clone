@@ -1,19 +1,21 @@
 import { calculateCartQuantity } from "../data/cart.js";
+import { logout } from "./http.js";
+import { showToast } from "./utils/toast.js";
 
 export function renderCartQuantity() {
   const cartQuantity = calculateCartQuantity();
-  
+
   const cartHtml = `
     <img class="cart-icon" src="images/icons/cart-icon.png" />
     <div class="cart-quantity">${cartQuantity}</div>
     <div class="cart-text">Cart</div>
-  `
+  `;
 
   document.querySelector(".js-cart-link").innerHTML = cartHtml;
 }
 
 export function renderHeader() {
-  document.querySelector('.js-amazon-header').innerHTML = `
+  document.querySelector(".js-amazon-header").innerHTML = `
     <div class="amazon-header-left-section">
       <a href="index.html" class="header-link">
         <img class="amazon-logo" src="images/amazon-logo-white.png" />
@@ -33,6 +35,14 @@ export function renderHeader() {
     </div>
 
     <div class="amazon-header-right-section">
+      <div class="user-greeting" tabindex="0" aria-haspopup="true" aria-expanded="false">
+        <span class="greeting-text"></span>
+        <span class="arrow-icon"></span>
+        <div class="dropdown-card" role="menu">
+          <button id="sign-out-btn" role="menuitem">Sign out</button>
+        </div>
+      </div>
+    
       <a class="orders-link header-link" href="orders.html">
         <span class="returns-text">Returns</span>
         <span class="orders-text">& Orders</span>
@@ -44,16 +54,36 @@ export function renderHeader() {
   `;
 
   renderCartQuantity();
-  
-  document.querySelector('.js-search-bar').addEventListener('keypress', (event) => {
-    const searchTerm = document.querySelector('.js-search-bar').value;
-    if (event.key === "Enter") {
-      window.location.href = `index.html?search=${searchTerm}`;
-    }
+
+  document
+    .querySelector(".js-search-bar")
+    .addEventListener("keypress", (event) => {
+      const searchTerm = document.querySelector(".js-search-bar").value;
+      if (event.key === "Enter") {
+        window.location.href = `index.html?search=${searchTerm}`;
+      }
+    });
+
+  document.querySelector(".js-search-button").addEventListener("click", () => {
+    const searchTerm = document.querySelector(".js-search-bar").value;
+    window.location.href = `index.html?search=${searchTerm}`;
   });
 
-  document.querySelector('.js-search-button').addEventListener('click', () => {
-    const searchTerm = document.querySelector('.js-search-bar').value;
-    window.location.href = `index.html?search=${searchTerm}`;
-  })
+  const user = JSON.parse(localStorage.getItem("user"));
+  document.querySelector(
+    ".greeting-text"
+  ).textContent = `Hello, ${user.firstname}`;
+
+  document
+    .getElementById("sign-out-btn")
+    .addEventListener("click", async () => {
+      const response = await logout();
+      if (response.ok) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+        window.location.href = "/index.html";
+      } else {
+        showToast("Logout failed: " + (response.message || "Unknown error"), "error");
+      }
+    });
 }

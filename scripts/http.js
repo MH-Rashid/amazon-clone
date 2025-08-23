@@ -72,7 +72,7 @@ export async function fetchAvailableProducts() {
     const newAccessToken = await tryRefreshToken();
     if (newAccessToken) {
       // Retry the original request with the new access token
-      const retryResponse = await fetch(`${baseURL}/api/meals`, {
+      const retryResponse = await fetch(`${baseURL}/api/products`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
