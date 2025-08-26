@@ -81,6 +81,7 @@ export function renderHeader() {
       if (response.ok) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("user");
+        localStorage.removeItem("products");
         window.location.href = "/index.html";
       } else {
         showToast("Logout failed: " + (response.message || "Unknown error"), "error");

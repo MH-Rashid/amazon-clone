@@ -1,8 +1,9 @@
 import { cart } from "../../data/cart.js";
 import { getProduct } from "../../data/products.js";
-import { getDeliveryOption } from "../../data/deliveryOptions.js";
+import { calculateDeliveryDate, getDeliveryOption } from "../../data/deliveryOptions.js";
 import formatCurrency from "../utils/money.js";
-import { addOrder } from "../../data/orders.js";
+import { createOrder } from "../http.js";
+import { showToast } from "../utils/toast.js";
 
 export function renderPaymentSummary() {
   let productPriceCents = 0;
@@ -69,24 +70,37 @@ export function renderPaymentSummary() {
 
   document.querySelector(".js-place-order")
     .addEventListener("click", async () => {
-      try {
-        const response = await fetch("https://supersimplebackend.dev/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cart: cart,
-          }),
-        });
-
-        const order = await response.json();
-        addOrder(order);
-      } catch (error) {
-        console.log("Unexpected error. Try again later.");
+      const updatedCart = cart.map(cartItem => {
+        const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
+        const estimatedDeliveryTime = calculateDeliveryDate(deliveryOption);
+        const { deliveryOptionId, ...rest } = cartItem;
+    
+        return {
+          ...rest,
+          estimatedDeliveryTime
+        };
+      });
+      
+      const payload = {
+        products: updatedCart,
+        totalCostCents: totalCents
       }
-
-      localStorage.removeItem('cart');
-      window.location.href = "orders.html";
+      
+      try {
+        const response = await createOrder(payload);
+        if (response._id) {
+          showToast("Order has been placed", "success");
+          localStorage.removeItem('cart');
+          window.location.href = "orders.html";
+        } else {
+          showToast(
+            "Failed to place order: " + (response.message || "Unknown error"),
+            "error"
+          );
+        }
+      } catch (error) {
+        console.error(error);
+        showToast("An error occurred: " + (error.message || "Unknown error"), "error");
+      } 
     });
 }

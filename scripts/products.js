@@ -1,11 +1,12 @@
-import { addToCart, calculateCartQuantity } from "../data/cart.js";
-import { products, loadProducts } from "../data/products.js";
+import { addToCart } from "../data/cart.js";
+import { loadProducts } from "../data/products.js";
 import { renderCartQuantity, renderHeader } from "./header.js";
 
 renderHeader();
-loadProducts(renderProductsGrid);
+renderProductsGrid();
 
-function renderProductsGrid() {
+async function renderProductsGrid() {
+  const products = await loadProducts();
   let productsHTML = "";
   let filteredProducts = products;
 

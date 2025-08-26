@@ -1,20 +1,35 @@
-import { orders } from "../data/orders.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import formatCurrency from "./utils/money.js";
-import { getProduct, loadProductsFetch } from "../data/products.js";
+import { getProduct } from "../data/products.js";
 import { addToCart } from "../data/cart.js";
 import { renderHeader, renderCartQuantity } from "./header.js";
+import { showToast } from "./utils/toast.js";
+import { fetchOrders } from "./http.js";
 
 async function loadPage() {
   renderHeader();
-  await loadProductsFetch();
 
+  let orders;
   let ordersHtml = "";
+  
+  try {
+    const data = await fetchOrders();
+    if (Array.isArray(data)) {
+      orders = data;
+    } else {
+      showToast(data.message || "No orders found.", "error");
+    }
+  } catch (err) {
+    console.error(err);
+    showToast(
+      "Failed to load orders: " + (err.message || "Unknown error"),
+      "error"
+    );
+  }
 
   orders.forEach((order) => {
     const { orderTime } = order;
     const orderDate = dayjs(orderTime).format("MMMM D");
-
     const { totalCostCents } = order;
     const totalCost = formatCurrency(totalCostCents);
 
@@ -34,7 +49,7 @@ async function loadPage() {
 
           <div class="order-header-right-section">
             <div class="order-header-label">Order ID:</div>
-            <div>${order.id}</div>
+            <div>${order._id}</div>
           </div>
         </div>
 
@@ -66,16 +81,22 @@ async function loadPage() {
             <div class="product-name">
               ${matchingProduct.name}
             </div>
-            <div class="product-delivery-date">${currentTime < arrivalDate ? 'Arriving' : 'Delivered'} on: ${arrivalDate.format("MMMM D")}</div>
+            <div class="product-delivery-date">${
+              currentTime < arrivalDate ? "Arriving" : "Delivered"
+            } on: ${arrivalDate.format("MMMM D")}</div>
             <div class="product-quantity">Quantity: ${product.quantity}</div>
-            <button class="buy-again-button button-primary js-buy-again-button" data-product-id="${matchingProduct.id}">
+            <button class="buy-again-button button-primary js-buy-again-button" data-product-id="${
+              matchingProduct.id
+            }">
               <img class="buy-again-icon" src="images/icons/buy-again.png" />
               <span class="buy-again-message">Buy it again</span>
             </button>
           </div>
 
           <div class="product-actions">
-            <a href="tracking.html?orderId=${order.id}&productId=${matchingProduct.id}">
+            <a href="tracking.html?orderId=${order._id}&productId=${
+          matchingProduct.id
+        }">
               <button class="track-package-button button-secondary">
                 Track package
               </button>
@@ -93,7 +114,7 @@ async function loadPage() {
     button.addEventListener("click", (event) => {
       addToCart(button.dataset.productId);
       renderCartQuantity();
-      button.innerHTML = '✔ Added';
+      button.innerHTML = "✔ Added";
       setTimeout(() => {
         button.innerHTML = `
           <img class="buy-again-icon" src="images/icons/buy-again.png">
