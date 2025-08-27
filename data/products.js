@@ -94,7 +94,7 @@ export async function loadProducts() {
     return products;
   } catch (error) {
     console.log("Unexpected error. Please try again later.");
-    showToast(`Failed to load products.` + error.message, "error");
+    showToast(error.message + ". Please try again later.", "error");
   }
 }
 

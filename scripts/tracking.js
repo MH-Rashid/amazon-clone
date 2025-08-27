@@ -1,16 +1,30 @@
-import { orders } from "../data/orders.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { getProduct } from "../data/products.js";
 import { renderHeader } from "./header.js";
+import { fetchSingleOrder } from "./http.js";
+import { showToast } from "./utils/toast.js";
 
 async function loadPage() {
-  renderHeader(); 
+  renderHeader();
 
   const url = new URL(window.location.href);
   const orderId = url.searchParams.get("orderId");
   const productId = url.searchParams.get("productId");
 
-  const matchingOrder = orders.find((order) => order.id === orderId);
+  let matchingOrder;
+
+  try {
+    const response = await fetchSingleOrder(orderId);
+    if (response.ok) {
+      matchingOrder = response.order;
+    } else {
+      showToast(response.message || "Order not found.", "error");
+      window.location.href = "orders.html";
+    }
+  } catch (error) {
+    console.error(error)
+    showToast("Failed to load order details." + error.message, "error");
+  }
 
   const { products } = matchingOrder;
 
@@ -31,16 +45,12 @@ async function loadPage() {
   const deliveryProgress =
     ((currentTime - orderTime) / (deliveryTime - orderTime)) * 100;
 
-  console.log(matchingOrder);
-  console.log(productDetails);
-  console.log(`delivery progress is ${deliveryProgress}%`);
-
   const html = `
     <a class="back-to-orders-link link-primary" href="orders.html">
       View all orders
     </a>
 
-    <div class="delivery-date">Arriving on ${arrivalDate}</div>
+    <div class="delivery-date">${deliveryProgress < 100 ? `Arriving on ${arrivalDate}` : `Delivered on ${arrivalDate}`}</div>
 
     <div class="product-info">
       ${matchingProduct.name}

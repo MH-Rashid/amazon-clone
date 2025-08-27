@@ -8,8 +8,13 @@ async function tryRefreshToken() {
     });
 
     const data = await res.json();
-    localStorage.setItem("accessToken", data.accessToken);
-    return data.accessToken;
+    
+    if (data.accessToken) {
+      localStorage.setItem("accessToken", data.accessToken);
+      return data.accessToken;
+    } else {
+      console.error("Failed to refresh token:", data.message);
+    }
   } catch (err) {
     console.error("Refresh error:", err);
     return null;
@@ -83,7 +88,7 @@ export async function fetchAvailableProducts() {
 
       const retryData = await retryResponse.json();
       return retryData;
-    }
+    } else window.location.href = "index.html";
   }
 
   const resData = await response.json();
@@ -116,7 +121,39 @@ export async function fetchOrders() {
 
       const retryData = await retryResponse.json();
       return retryData;
-    }
+    } else window.location.href = "index.html";
+  }
+
+  const resData = await response.json();
+  return resData;
+}
+
+export async function fetchSingleOrder(orderId) {
+  const accessToken = localStorage.getItem("accessToken");
+  const response = await fetch(`${baseURL}/api/orders/${orderId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    credentials: "include",
+  });
+
+  if (response.status === 401) {
+    const newAccessToken = await tryRefreshToken();
+    if (newAccessToken) {
+      const retryResponse = await fetch(`${baseURL}/api/orders`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${newAccessToken}`,
+        },
+        credentials: "include",
+      });
+
+      const retryData = await retryResponse.json();
+      return retryData;
+    } else window.location.href = "index.html";
   }
 
   const resData = await response.json();
@@ -151,46 +188,7 @@ export async function createOrder(orderData) {
 
       const retryData = await retryResponse.json();
       return retryData;
-    }
-  }
-
-  const resData = await response.json();
-  return resData;
-}
-
-export async function deleteOrder(orderId) {
-  const accessToken = localStorage.getItem("accessToken");
-  const response = await fetch(`${baseURL}/api/orders`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({
-      id: orderId,
-    }),
-    credentials: "include",
-  });
-
-  if (response.status === 401) {
-    const newAccessToken = await tryRefreshToken();
-    if (newAccessToken) {
-      // Retry the original request with the new access token
-      const retryResponse = await fetch(`${baseURL}/api/orders`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${newAccessToken}`,
-        },
-        body: JSON.stringify({
-          id: orderId,
-        }),
-        credentials: "include",
-      });
-
-      const retryData = await retryResponse.json();
-      return retryData;
-    }
+    } else window.location.href = "index.html";
   }
 
   const resData = await response.json();

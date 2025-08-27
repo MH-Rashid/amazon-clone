@@ -72,7 +72,7 @@ export function renderPaymentSummary() {
     .addEventListener("click", async () => {
       const updatedCart = cart.map(cartItem => {
         const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
-        const estimatedDeliveryTime = calculateDeliveryDate(deliveryOption);
+        const estimatedDeliveryTime = calculateDeliveryDate(deliveryOption).format("dddd, MMMM D YYYY");
         const { deliveryOptionId, ...rest } = cartItem;
     
         return {
