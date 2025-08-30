@@ -1,5 +1,6 @@
 import { addToCart } from "../data/cart.js";
 import { loadProducts } from "../data/products.js";
+import { renderMobileCartQuantity } from "./bottomNav.js";
 import { renderCartQuantity, renderHeader } from "./header.js";
 
 renderHeader();
@@ -25,7 +26,7 @@ async function renderProductsGrid() {
   }
 
   if (!filteredProducts.length) {
-    document.querySelector('.js-main').innerHTML = `<p style="
+    document.querySelector(".js-main").innerHTML = `<p style="
       font-family: Arial;
       font-size: 16px;
       color: rgb(33, 33, 33);
@@ -102,8 +103,10 @@ async function renderProductsGrid() {
       const { productId } = button.dataset;
 
       addToCart(productId);
-      // updateCartQuantity();
       renderCartQuantity();
+      if (document.querySelector(".bottom-nav")) {
+        renderMobileCartQuantity();
+      }
 
       const addedMessage = document.querySelector(
         `.js-added-to-cart-${productId}`

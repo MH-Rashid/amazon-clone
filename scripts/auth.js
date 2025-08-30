@@ -73,9 +73,6 @@ function AuthForm() {
       localStorage.setItem("accessToken", result.accessToken);
       localStorage.setItem("user", JSON.stringify(result.user));
 
-      console.log("accessToken:", result.accessToken);
-      console.log("user:", result.user);
-
       showToast(
         `Login successful. Welcome, ${result.user.firstname}`,
         "success"

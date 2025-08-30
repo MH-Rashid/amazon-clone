@@ -17,7 +17,7 @@ export function renderCartQuantity() {
 export function renderHeader() {
   document.querySelector(".js-amazon-header").innerHTML = `
     <div class="amazon-header-left-section">
-      <a href="index.html" class="header-link">
+      <a href="products.html" class="header-link">
         <img class="amazon-logo" src="images/amazon-logo-white.png" />
         <img
           class="amazon-mobile-logo"
@@ -44,8 +44,7 @@ export function renderHeader() {
       </div>
     
       <a class="orders-link header-link" href="orders.html">
-        <span class="returns-text">Returns</span>
-        <span class="orders-text">& Orders</span>
+        <span class="orders-text">Orders</span>
       </a>
 
       <a class="cart-link header-link js-cart-link" href="checkout.html">
@@ -55,18 +54,30 @@ export function renderHeader() {
 
   renderCartQuantity();
 
+  const disclaimer = document.querySelector(".disclaimer");
+  const header = document.querySelector(".amazon-header");
+
+  function adjustHeaderOffset() {
+    // Adjust header offset based on disclaimer height
+    const height = disclaimer.offsetHeight;
+    header.style.marginTop = `${height}px`;
+  }
+
+  window.addEventListener("load", adjustHeaderOffset);
+  window.addEventListener("resize", adjustHeaderOffset);
+
   document
     .querySelector(".js-search-bar")
     .addEventListener("keypress", (event) => {
       const searchTerm = document.querySelector(".js-search-bar").value;
       if (event.key === "Enter") {
-        window.location.href = `index.html?search=${searchTerm}`;
+        window.location.href = `products.html?search=${searchTerm}`;
       }
     });
 
   document.querySelector(".js-search-button").addEventListener("click", () => {
     const searchTerm = document.querySelector(".js-search-bar").value;
-    window.location.href = `index.html?search=${searchTerm}`;
+    window.location.href = `products.html?search=${searchTerm}`;
   });
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -84,7 +95,24 @@ export function renderHeader() {
         localStorage.removeItem("products");
         window.location.href = "/index.html";
       } else {
-        showToast("Logout failed: " + (response.message || "Unknown error"), "error");
+        showToast(
+          "Logout failed: " + (response.message || "Unknown error"),
+          "error"
+        );
       }
     });
 }
+
+function handleIconsVisibility() {
+  if (window.innerWidth <= 768) {
+    document.querySelector(".amazon-header-left-section").style.display = "none";
+    document.querySelector(".amazon-header-right-section").style.display = "none";
+  } else {
+    document.querySelector(".amazon-header-left-section").style.display = "flex";
+    document.querySelector(".amazon-header-right-section").style.display = "flex";
+  }
+}
+
+window.addEventListener("resize", handleIconsVisibility);
+window.addEventListener("load", handleIconsVisibility);
+window.addEventListener("DOMContentLoaded", handleIconsVisibility);

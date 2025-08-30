@@ -22,7 +22,7 @@ async function loadPage() {
       window.location.href = "orders.html";
     }
   } catch (error) {
-    console.error(error)
+    console.error(error);
     showToast("Failed to load order details." + error.message, "error");
   }
 
@@ -39,7 +39,7 @@ async function loadPage() {
   );
 
   const currentTime = dayjs();
-  const orderTime = dayjs(matchingOrder.orderTime);
+  const orderTime = dayjs(matchingOrder.createdAt);
   const deliveryTime = dayjs(productDetails.estimatedDeliveryTime);
 
   const deliveryProgress =
@@ -50,7 +50,11 @@ async function loadPage() {
       View all orders
     </a>
 
-    <div class="delivery-date">${deliveryProgress < 100 ? `Arriving on ${arrivalDate}` : `Delivered on ${arrivalDate}`}</div>
+    <div class="delivery-date">${
+      deliveryProgress < 100
+        ? `Arriving on ${arrivalDate}`
+        : `Delivered on ${arrivalDate}`
+    }</div>
 
     <div class="product-info">
       ${matchingProduct.name}
@@ -64,9 +68,17 @@ async function loadPage() {
     />
 
     <div class="progress-labels-container">
-      <div class="progress-label ${deliveryProgress <= 49 && 'current-status'}">Preparing</div>
-      <div class="progress-label ${deliveryProgress >= 50 && deliveryProgress <= 99 ? 'current-status' : null}">Shipped</div>
-      <div class="progress-label ${deliveryProgress >= 100 && 'current-status'}">Delivered</div>
+      <div class="progress-label ${
+        deliveryProgress <= 49 && "current-status"
+      }">Preparing</div>
+      <div class="progress-label ${
+        deliveryProgress >= 50 && deliveryProgress <= 99
+          ? "current-status"
+          : null
+      }">Shipped</div>
+      <div class="progress-label ${
+        deliveryProgress >= 100 && "current-status"
+      }">Delivered</div>
     </div>
 
     <div class="progress-bar-container">
@@ -75,6 +87,14 @@ async function loadPage() {
   `;
 
   document.querySelector(".js-order-tracking").innerHTML = html;
+
+  // set up progress bar transition
+  const progressEl = document.querySelector("progress");
+  progressEl.value = 0;
+
+  setTimeout(() => {
+    progressEl.value = deliveryProgress; // triggers CSS transition
+  }, 100);
 }
 
 loadPage();

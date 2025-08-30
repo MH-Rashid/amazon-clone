@@ -6,7 +6,7 @@ export default function renderCheckoutHeader() {
   document.querySelector(".js-checkout-header").innerHTML = `
     <div class="header-content">
       <div class="checkout-header-left-section">
-        <a href="index.html">
+        <a href="products.html">
           <img class="amazon-logo" src="images/amazon-logo.png" />
           <img
             class="amazon-mobile-logo"

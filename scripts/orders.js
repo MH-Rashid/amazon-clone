@@ -5,17 +5,20 @@ import { addToCart } from "../data/cart.js";
 import { renderHeader, renderCartQuantity } from "./header.js";
 import { showToast } from "./utils/toast.js";
 import { fetchOrders } from "./http.js";
+import { renderMobileCartQuantity } from "./bottomNav.js";
 
 async function loadPage() {
   renderHeader();
 
   let orders;
   let ordersHtml = "";
-  
+
   try {
     const data = await fetchOrders();
     if (Array.isArray(data)) {
-      orders = data;
+      orders = data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      ); // sort from newest to oldest
     } else {
       showToast(data.message || "No orders found.", "error");
     }
@@ -28,8 +31,8 @@ async function loadPage() {
   }
 
   orders.forEach((order) => {
-    const { orderTime } = order;
-    const orderDate = dayjs(orderTime).format("MMMM D");
+    const { createdAt } = order;
+    const orderDate = dayjs(createdAt).format("MMMM D");
     const { totalCostCents } = order;
     const totalCost = formatCurrency(totalCostCents);
 
@@ -114,6 +117,9 @@ async function loadPage() {
     button.addEventListener("click", (event) => {
       addToCart(button.dataset.productId);
       renderCartQuantity();
+      if (document.querySelector(".bottom-nav")) {
+        renderMobileCartQuantity();
+      }
       button.innerHTML = "✔ Added";
       setTimeout(() => {
         button.innerHTML = `

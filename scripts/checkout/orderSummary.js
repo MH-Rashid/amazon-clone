@@ -13,6 +13,7 @@ import {
 } from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
 import renderCheckoutHeader from "./checkoutHeader.js";
+import { renderMobileCartQuantity } from "../bottomNav.js";
 
 export function renderOrderSummary() {
   let cartSummaryHtml = "";
@@ -129,6 +130,9 @@ export function renderOrderSummary() {
           const newQuantity = Number(newQuantityInput.value);
           updateQuantity(productId, newQuantity);
           renderCheckoutHeader();
+          if (document.querySelector(".bottom-nav")) {
+            renderMobileCartQuantity();
+          }
           renderOrderSummary();
           renderPaymentSummary();
         }

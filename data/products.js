@@ -93,7 +93,7 @@ export async function loadProducts() {
 
     return products;
   } catch (error) {
-    console.log("Unexpected error. Please try again later.");
+    console.error(error);
     showToast(error.message + ". Please try again later.", "error");
   }
 }
@@ -102,6 +102,5 @@ const products = await loadProducts();
 
 export function getProduct(productId) {
   const matchingProduct = products.find((product) => product.id === productId);
-
   return matchingProduct;
 }
