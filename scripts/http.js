@@ -1,4 +1,4 @@
-const baseURL = "https://dashboard.render.com/web/srv-d2pn7qer433s73dgkbk0/deploys/dep-d2pn7qmr433s73dgkc10";
+const baseURL = "https://amazon-clone-backend-324k.onrender.com";
 
 async function tryRefreshToken() {
   try {
