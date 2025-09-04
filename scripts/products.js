@@ -19,8 +19,8 @@ async function renderProductsGrid() {
       const { keywords } = product;
 
       return (
-        product.name.toLowerCase().includes(searchTerm) ||
-        keywords.some((keyword) => keyword.toLowerCase().includes(searchTerm))
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        keywords.some((keyword) => keyword.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     });
   }
