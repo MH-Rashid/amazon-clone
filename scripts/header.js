@@ -103,16 +103,16 @@ export function renderHeader() {
     });
 }
 
-function handleIconsVisibility() {
-  if (window.innerWidth <= 768) {
-    document.querySelector(".amazon-header-left-section").style.display = "none";
-    document.querySelector(".amazon-header-right-section").style.display = "none";
-  } else {
-    document.querySelector(".amazon-header-left-section").style.display = "flex";
-    document.querySelector(".amazon-header-right-section").style.display = "flex";
-  }
-}
+// function handleIconsVisibility() {
+//   if (window.innerWidth <= 768) {
+//     document.querySelector(".amazon-header-left-section").style.display = "none";
+//     document.querySelector(".amazon-header-right-section").style.display = "none";
+//   } else {
+//     document.querySelector(".amazon-header-left-section").style.display = "flex";
+//     document.querySelector(".amazon-header-right-section").style.display = "flex";
+//   }
+// }
 
-window.addEventListener("resize", handleIconsVisibility);
-window.addEventListener("load", handleIconsVisibility);
-window.addEventListener("DOMContentLoaded", handleIconsVisibility);
+// window.addEventListener("resize", handleIconsVisibility);
+// window.addEventListener("load", handleIconsVisibility);
+// window.addEventListener("DOMContentLoaded", handleIconsVisibility);

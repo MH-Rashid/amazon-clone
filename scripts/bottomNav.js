@@ -54,60 +54,94 @@ function renderBottomNav() {
   return bottomNav;
 }
 
-let bottomNav = null;
+const bottomNav = renderBottomNav();
+document.body.appendChild(bottomNav);
+renderMobileCartQuantity();
 
-function handleBottomNavVisibility() {
-  if (window.innerWidth <= 768) {
-    if (!document.querySelector(".bottom-nav")) {
-      bottomNav = renderBottomNav();
-      document.body.appendChild(bottomNav);
-      renderMobileCartQuantity();
+const accountBtn = document.getElementById("account-btn");
+const logoutPopup = document.querySelector(".logout-popup");
 
-      const accountBtn = document.getElementById("account-btn");
-      const logoutPopup = document.querySelector(".logout-popup");
+accountBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  logoutPopup.classList.toggle("active");
+});
 
-      accountBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        logoutPopup.classList.toggle("active");
-      });
-
-      // Close popup if user taps outside
-      document.addEventListener("click", (e) => {
-        if (!e.target.closest(".account-wrapper")) {
-          logoutPopup.classList.remove("active");
-        }
-      });
-
-      document
-        .querySelector(".logout-btn")
-        .addEventListener("click", async () => {
-          const response = await logout();
-          if (response.ok) {
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("user");
-            localStorage.removeItem("products");
-            window.location.href = "/index.html";
-          } else {
-            showToast(
-              "Logout failed: " + (response.message || "Unknown error"),
-              "error"
-            );
-          }
-        });
-    }
-  } else {
-    const existingNav = document.querySelector(".bottom-nav");
-    if (existingNav) {
-      existingNav.style.display = "none";
-      existingNav.remove();
-      bottomNav = null;
-    }
+// Close popup if user taps outside
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".account-wrapper")) {
+    logoutPopup.classList.remove("active");
   }
-}
+});
 
-window.addEventListener("load", handleBottomNavVisibility);
-window.addEventListener("DOMContentLoaded", handleBottomNavVisibility);
-window.addEventListener("resize", handleBottomNavVisibility);
+document.querySelector(".logout-btn").addEventListener("click", async () => {
+  const response = await logout();
+  if (response.ok) {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    localStorage.removeItem("products");
+    window.location.href = "/index.html";
+  } else {
+    showToast(
+      "Logout failed: " + (response.message || "Unknown error"),
+      "error"
+    );
+  }
+});
+
+// let bottomNav = null;
+
+// function handleBottomNavVisibility() {
+//   if (window.innerWidth <= 768) {
+//     if (!document.querySelector(".bottom-nav")) {
+//       bottomNav = renderBottomNav();
+//       document.body.appendChild(bottomNav);
+//       renderMobileCartQuantity();
+
+//       const accountBtn = document.getElementById("account-btn");
+//       const logoutPopup = document.querySelector(".logout-popup");
+
+//       accountBtn.addEventListener("click", (e) => {
+//         e.preventDefault();
+//         logoutPopup.classList.toggle("active");
+//       });
+
+//       // Close popup if user taps outside
+//       document.addEventListener("click", (e) => {
+//         if (!e.target.closest(".account-wrapper")) {
+//           logoutPopup.classList.remove("active");
+//         }
+//       });
+
+//       document
+//         .querySelector(".logout-btn")
+//         .addEventListener("click", async () => {
+//           const response = await logout();
+//           if (response.ok) {
+//             localStorage.removeItem("accessToken");
+//             localStorage.removeItem("user");
+//             localStorage.removeItem("products");
+//             window.location.href = "/index.html";
+//           } else {
+//             showToast(
+//               "Logout failed: " + (response.message || "Unknown error"),
+//               "error"
+//             );
+//           }
+//         });
+//     }
+//   } else {
+//     const existingNav = document.querySelector(".bottom-nav");
+//     if (existingNav) {
+//       existingNav.style.display = "none";
+//       existingNav.remove();
+//       bottomNav = null;
+//     }
+//   }
+// }
+
+// window.addEventListener("load", handleBottomNavVisibility);
+// window.addEventListener("DOMContentLoaded", handleBottomNavVisibility);
+// window.addEventListener("resize", handleBottomNavVisibility);
 
 export function renderMobileCartQuantity() {
   const cartQuantity = calculateCartQuantity();
